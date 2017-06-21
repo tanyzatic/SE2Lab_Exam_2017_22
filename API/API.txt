@@ -1,0 +1,132 @@
+swagger: '2.0'
+info:
+  title: Shop WS
+  description: A web services that manages the e-commerce
+  version: "1.0.0"
+host: myserver.it
+schemes:
+  - https
+basePath: /
+produces:
+  - application/json
+consumes:
+  - application/json
+paths:
+  /:
+    get:
+      summary: home page
+      description: it returns the home page of the e-commerce service
+      responses:
+        200:
+          description: welcome page
+
+            
+  /showDisks:
+    get:
+      summary: show disks stored in the records shop
+      description: it returns the complete list of disks stored in records shop
+      responses:
+        200:
+          description: web page with the list of disks
+          
+  /searchDisk:
+    post:
+      summary: search for disks
+      consumes:
+        - application/x-www-form-urlencoded
+      description: it returns a list of items that match the criteria
+      parameters:
+        - name: ID
+          in: formData
+          description: ID of the disk
+          required: true
+          type: string
+      responses:
+        200:
+          description: the disk found
+          schema: 
+              $ref: "#/definitions/item"
+        406:
+          description: ID of error
+          schema: 
+            properties:
+              error:
+                type: integer
+        404:
+          description: no disk that matches the criteria
+          
+  /sellDisk:
+    post:
+      summary: sell a disk
+      consumes:
+        - application/x-www-form-urlencoded
+      description: it returns the disk sold, reduce the quantity in warehouse by 1, applies an automatic discound (up to 50%) based on the number of days passed since the disk has been remastered. Each days the discount increases by 0.01%
+      parameters:
+        - name: ID
+          in: formData
+          description: ID of the disk
+          required: true
+          type: string
+      responses:
+        200:
+          description: object of the sold disk
+          schema: 
+              $ref: "#/definitions/item"
+        406:
+          description: ID of error
+          schema: 
+            properties:
+              error:
+                type: integer
+        404:
+          description: no disk found
+            
+  /searchSimilarDisk:
+    post:
+      summary: search for disks with the same genre
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: genre
+          in: formData
+          description: genre to search for
+          required: true
+          type: string
+      responses:
+        200:
+          description: list of disk that matches the criteria
+          schema: 
+            type: array
+            items:
+              $ref: "#/definitions/item"
+        406:
+          description: ID of error, parameters are not correct 
+          schema: 
+            properties:
+              error:
+                type: integer
+        400:
+          description: disk not sent
+          
+definitions:
+  item:
+    properties:
+      ID:
+        type: string
+        description: ID of the disk
+      price:
+        type: integer
+        description: price of the disk
+      quantity:
+        type: integer
+        description: quantity of copies of disk stored
+      genre:
+        type: string
+        description: genre of the disk
+      date:
+        type: string
+        format: date
+        description: Date ofthe last remaster of the disk
+
+        
+
