@@ -1,3 +1,4 @@
+
 //list of items stored in record shop
 
 //date syntax: Date(<year>, <month>, <day>, <hours>, <minutes>, <seconds>, <milliseconds>)
@@ -66,6 +67,35 @@ var searchDisk = function searchDisk(diskID)
         return disks[position];
 }
 
+
+
+
+var rmDisk = function rmDisk(diskID)
+{
+    //search for the elements
+    var position = searchPos(diskID);
+    
+    if (position == null)
+        return position
+    else
+        {
+            if(disks[position].quantity != 0)
+                {
+                    disks[position].quantity= disks[position].quantity-1;
+                    disks.splice(position);
+                    
+                }
+        }
+}
+
+
+
+
+
+
+
+
+
 /** 
  * @brief it searches one elements in disks
  * @param diskID
@@ -110,3 +140,4 @@ var remaster = function remaster(item)
 exports.getDisks = getDisks; 
 exports.searchDisk = searchDisk; 
 exports.remaster = remaster; 
+exports.rmDisk = rmDisk; 
